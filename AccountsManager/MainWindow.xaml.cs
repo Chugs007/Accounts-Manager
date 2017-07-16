@@ -30,20 +30,32 @@ namespace AccountsManager
             InitializeComponent();                      
             UserAccounts = new ObservableCollection<UserAccount>();
             this.DataContext = this;
-            listboxuseraccounts.ItemsSource = UserAccounts;
+            listboxuseraccounts.ItemsSource = UserAccounts;            
         }
 
         private void btnClickEncrypt(object sender, RoutedEventArgs e)
         {
+            if (String.IsNullOrEmpty(FileEncryptor.PasswordHash))
+            {
+                System.Windows.MessageBox.Show("Master Password has not been set, please set master password first.");
+                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+                smpw.ShowDialog();
+                return;
+            }
             if (string.IsNullOrEmpty(txtFilePath.Text))
             {
-                System.Windows.MessageBox.Show("Please select a file first.");
+                System.Windows.MessageBox.Show("Please select a user accounts file first.");
                 return;
             }            
             string file = txtFilePath.Text;
+            if (!File.Exists(file))
+            {
+                System.Windows.MessageBox.Show("Specified user accounts file does not exist!");
+                return;
+            }
             password = txtBxPassword.Password;         
-            if (FileEncryptor.FirstTime)
-                salt = FileEncryptor.CreateSalt(10);
+            //if (FileEncryptor.FirstTime)
+            //    salt = FileEncryptor.CreateSalt(10);
             salt = Convert.FromBase64String(FileEncryptor.Salt);
             if (!string.IsNullOrEmpty(FileEncryptor.PasswordHash))
             {
@@ -143,7 +155,13 @@ namespace AccountsManager
                 fe = new FileEncryptor(ofd.FileName);        
                 ReadXmlFile(ofd.FileName);
             }
-            lblLoading.Visibility = Visibility.Hidden;                        
+            lblLoading.Visibility = Visibility.Hidden;
+            if (String.IsNullOrEmpty(FileEncryptor.PasswordHash))
+            {
+                System.Windows.MessageBox.Show("Please enter a master password to be used to encrypt file.");
+                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+                smpw.ShowDialog();
+            }
         }
 
         private void btnClickValidate(object sender, RoutedEventArgs e)
@@ -153,11 +171,11 @@ namespace AccountsManager
                 System.Windows.MessageBox.Show("Please enter a password first!");
                 return;
             }
-            if (string.IsNullOrEmpty(FileEncryptor.Salt))
-            {
-                System.Windows.MessageBox.Show("Selected file has not been previously encrypted before, please encrypt first before attempting to validate a password!");
-                return;
-            }
+            //if (string.IsNullOrEmpty(FileEncryptor.Salt))
+            //{
+            //    System.Windows.MessageBox.Show("Selected file has not been previously encrypted before, please encrypt first before attempting to validate a password!");
+            //    return;
+            //}
             string inputPassword = txtBxPassword.Password;
             salt = Convert.FromBase64String(FileEncryptor.Salt);
             bool CorrectPassword = FileEncryptor.ValidatePassword(inputPassword,salt);

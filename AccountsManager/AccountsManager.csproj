@@ -69,6 +69,9 @@
     <Compile Include="SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SetMasterPasswordWindow.xaml.cs">
+      <DependentUpon>SetMasterPasswordWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserAccount.cs" />
     <Page Include="AccountCreationsWindow.xaml">
       <SubType>Designer</SubType>
@@ -101,6 +104,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SearchWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetMasterPasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
