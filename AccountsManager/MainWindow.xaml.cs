@@ -148,20 +148,18 @@ namespace AccountsManager
 
         private void btnClickBrowse(object sender, RoutedEventArgs e)
         {            
-            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog() { DefaultExt = "xml",Filter= "XML Files|*.xml"};                                  
-            lblLoading.Visibility = Visibility.Visible;
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog() { DefaultExt = "xml",Filter= "XML Files|*.xml"};                                              
             if (ofd.ShowDialog() == true)
             {              
                 fe = new FileEncryptor(ofd.FileName);        
                 ReadXmlFile(ofd.FileName);
-            }
-            lblLoading.Visibility = Visibility.Hidden;
             if (String.IsNullOrEmpty(FileEncryptor.PasswordHash))
             {
                 System.Windows.MessageBox.Show("Please enter a master password to be used to encrypt file.");
                 SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
                 smpw.ShowDialog();
             }
+            }            
         }
 
         private void btnClickValidate(object sender, RoutedEventArgs e)
@@ -347,8 +345,11 @@ namespace AccountsManager
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string directoryName = fbd.SelectedPath;
-                File.Copy(Directory.GetCurrentDirectory() + @"\AccountsManagerUsers.xml", directoryName + @"\AccountsManagerUsers.xml");
-                File.Copy(Directory.GetCurrentDirectory() + @"\AccountsManager.xml", directoryName + @"\AccountsManager.xml");
+                string projectDirectoy = AppDomain.CurrentDomain.BaseDirectory;
+                File.Copy(projectDirectoy + @"\AccountsManagerUsers.xml", directoryName + @"\AccountsManagerUsers.xml");
+                File.Copy(projectDirectoy + @"\AccountsManager.xml", directoryName + @"\AccountsManager.xml");
+                //File.Copy(Directory.GetCurrentDirectory() + @"\AccountsManagerUsers.xml", directoryName + @"\AccountsManagerUsers.xml");
+                //File.Copy(Directory.GetCurrentDirectory() + @"\AccountsManager.xml", directoryName + @"\AccountsManager.xml");
             }
         }
     }
