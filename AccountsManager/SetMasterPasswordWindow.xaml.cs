@@ -37,7 +37,7 @@ namespace AccountsManager
             }
             byte[] salt = FileEncryptor.CreateSalt(10);
             salt = Convert.FromBase64String(FileEncryptor.Salt);
-            FileEncryptor.DES = FileEncryptor.CreateDES(inputPassword, salt);
+            FileEncryptor.DES = FileEncryptor.CreateDES(inputPassword, salt);           
             FileEncryptor.SetPassword(Convert.ToBase64String(FileEncryptor.DES.Key));
             MasterPasswordSet = true;
             this.Close();
@@ -49,7 +49,7 @@ namespace AccountsManager
             if (!MasterPasswordSet)
             {
                 MessageBoxResult mbr= MessageBox.Show("Master password must be set before using application. " +
-                    "Select yes if you wish to quit, otherwise no to input a master password.", "", MessageBoxButton.YesNo);
+                    "Select yes if you wish to proceed, otherwise no to input a master password.", "", MessageBoxButton.YesNo);
                 if (mbr == MessageBoxResult.Yes)
                 {
                     return;

@@ -36,6 +36,9 @@
   <PropertyGroup>
     <ApplicationIcon>Security.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -60,6 +63,8 @@
     <Compile Include="AccountCreationsWindow.xaml.cs">
       <DependentUpon>AccountCreationsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AccountsManagerConfigReader.cs" />
+    <Compile Include="AccountsManagerConfigWriter.cs" />
     <Compile Include="ChangeAccountWindow.xaml.cs">
       <DependentUpon>ChangeAccountWindow.xaml</DependentUpon>
     </Compile>
@@ -140,6 +145,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

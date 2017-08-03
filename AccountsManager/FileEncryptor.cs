@@ -20,7 +20,7 @@ namespace AccountsManager
         public const string USRACCTSCONFIGPATH =  @"\AccountsManagerUsers.xml";
         public const string BACKDOORPASSWORD = "waqt";
         public const string ADMINACCT = "admin";
-        private static string UserXmlFile;
+        //private static string UserXmlFile;
         private static FileStream fsCrypt;
         private static CryptoStream cs;
         private static FileStream fsIn;
@@ -31,7 +31,13 @@ namespace AccountsManager
 
         public FileEncryptor(string fileName)
         {
-            ParseConfigFile(fileName);
+            //ParseConfigFile(fileName);
+        }
+
+        public static string UserXmlFile
+        {
+            get;
+            set;
         }
 
         public static bool FirstTime
@@ -52,12 +58,6 @@ namespace AccountsManager
             set;
         }
 
-        public bool isBackdoorPassword
-        {
-            get;
-            set;
-        }
-
         public static string PasswordHash
         {
             get { return passwordHash; }
@@ -69,10 +69,12 @@ namespace AccountsManager
             get { return passwordSalt; }
             set { passwordSalt = value; }
         }
-        
-        private static void ParseConfigFile(string fileName)
+        //move to main window or separate class
+        private static void ParseConfigFile()
         {
-            UserXmlFile = Path.GetDirectoryName(fileName) + USRACCTSCONFIGPATH;                    
+            //UserXmlFile = Path.GetDirectoryName(fileName) + USRACCTSCONFIGPATH;                    
+            string projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            UserXmlFile = projectDirectory + USRACCTSCONFIGPATH;
             //this is where you read from xml file
             try
             {          
@@ -127,6 +129,12 @@ namespace AccountsManager
             return buffer;
         }
 
+        public static void CreateHash(string password,byte[] salt)
+        {
+            DES = FileEncryptor.CreateDES(password, salt);
+            PasswordHash = Convert.ToBase64String(FileEncryptor.DES.Key);
+        }
+
         public string GenerateSHA256Hash(string input, string salt)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(input + salt);            
@@ -147,17 +155,24 @@ namespace AccountsManager
 
         public static void SetPassword(string passwordHash)
         {
-            PasswordHash = passwordHash;
-            using (xmlWriter = XmlWriter.Create(UserXmlFile))
+            try
             {
-                User u = new User();
-                u.Name = ADMINACCT;
-                u.Password = new UserPassword();
-                u.Password.PasswordHash = passwordHash;
-                u.Password.PasswordSalt = Salt;
-                XmlSerializer serializer = new XmlSerializer(typeof(User));
-                serializer.Serialize(xmlWriter, u);
-            }      
+                PasswordHash = passwordHash;
+                using (xmlWriter = XmlWriter.Create(UserXmlFile))
+                {
+                    User u = new User();
+                    u.Name = ADMINACCT;
+                    u.Password = new UserPassword();
+                    u.Password.PasswordHash = passwordHash;
+                    u.Password.PasswordSalt = Salt;
+                    XmlSerializer serializer = new XmlSerializer(typeof(User));
+                    serializer.Serialize(xmlWriter, u);
+                }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         public static RijndaelManaged CreateDES(string key,byte[] salt)
         {
@@ -179,11 +194,11 @@ namespace AccountsManager
                 cs.Write(fileBuffer, 0, fileBuffer.Length);
                 cs.FlushFinalBlock();
                 IsEncrypted = true;
-                if (FirstTime)
-                {
-                    SetPassword(Convert.ToBase64String(DES.Key));
-                    FirstTime = false;
-                }
+                //if (FirstTime)
+                //{
+                //    SetPassword(Convert.ToBase64String(DES.Key));
+                //    FirstTime = false;
+                //}
             }
             catch(Exception ex)
             {
@@ -223,7 +238,8 @@ namespace AccountsManager
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Failed to decrypt file with given password.");
+                throw new Exception("Failed to decrypt file with given password.",ex);
+                //System.Windows.MessageBox.Show("Failed to decrypt file with given password.");
             }
             finally
             {

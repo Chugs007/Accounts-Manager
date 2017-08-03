@@ -14,12 +14,14 @@ namespace AccountsManager
     public partial class MainWindow : Window
     {
         public const string SPLASHSCRNIMGPATH = @"Resources\acctsmgrsplash.png";
+        private const string ACCTSMGRCONFIGFILEPATH = @"\AccountsManager.xml";
+        private const string ACCTSMGRUSERSCONFIGPATH = @"\AccountsManagerUsers.xml";
         private string password;
         private byte[] salt;        
         private ObservableCollection<UserAccount> UserAccounts;
         private UserAccount currentUserAccount;
         private FileEncryptor fe;
-       
+
         public MainWindow()
         {
             SplashScreen sc = new SplashScreen(SPLASHSCRNIMGPATH);
@@ -27,11 +29,23 @@ namespace AccountsManager
             sc.Close(TimeSpan.FromSeconds(3));
             System.Threading.Thread.Sleep(3000);
             sc = null;
-            InitializeComponent();                      
+            InitializeComponent();
             UserAccounts = new ObservableCollection<UserAccount>();
             this.DataContext = this;
-            listboxuseraccounts.ItemsSource = UserAccounts;            
+            listboxuseraccounts.ItemsSource = UserAccounts;
+            string projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            ReadXmlFile(projectDirectory + ACCTSMGRCONFIGFILEPATH);
+            FileEncryptor.UserXmlFile = projectDirectory + ACCTSMGRUSERSCONFIGPATH;
+            AccountsManagerConfigReader amcr = new AccountsManagerConfigReader(FileEncryptor.UserXmlFile);
+            amcr.readConfigFile();
+            if (String.IsNullOrEmpty(FileEncryptor.PasswordHash))
+            {
+                System.Windows.MessageBox.Show("Please enter a master password to be used to encrypt file.");
+                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+                smpw.ShowDialog();
+            }
         }
+    
 
         private void btnClickEncrypt(object sender, RoutedEventArgs e)
         {
@@ -98,7 +112,15 @@ namespace AccountsManager
                     return;
                 }
             }
-            DecryptPassword();
+            try
+            {
+                DecryptPassword();
+            }
+            catch(Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+                return;
+            }
             ReadXmlFile(txtFilePath.Text);
         }
 
@@ -146,28 +168,34 @@ namespace AccountsManager
             }
         }
 
-        private void btnClickBrowse(object sender, RoutedEventArgs e)
-        {            
-            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog() { DefaultExt = "xml",Filter= "XML Files|*.xml"};                                              
-            if (ofd.ShowDialog() == true)
-            {              
-                fe = new FileEncryptor(ofd.FileName);        
-                ReadXmlFile(ofd.FileName);
-            if (String.IsNullOrEmpty(FileEncryptor.PasswordHash))
-            {
-                System.Windows.MessageBox.Show("Please enter a master password to be used to encrypt file.");
-                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
-                smpw.ShowDialog();
-            }
-            }            
-        }
+        //private void btnClickBrowse(object sender, RoutedEventArgs e)
+        //{            
+        //    Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog() { DefaultExt = "xml",Filter= "XML Files|*.xml"};                                              
+        //    if (ofd.ShowDialog() == true)
+        //    {              
+        //        fe = new FileEncryptor(ofd.FileName);        
+        //        ReadXmlFile(ofd.FileName);
+        //    if (String.IsNullOrEmpty(FileEncryptor.PasswordHash))
+        //    {
+        //        System.Windows.MessageBox.Show("Please enter a master password to be used to encrypt file.");
+        //        SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+        //        smpw.ShowDialog();
+        //    }
+        //    }            
+        //}
 
         private void btnClickValidate(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(txtBxPassword.Password))
             {
-                System.Windows.MessageBox.Show("Please enter a password first!");
+                System.Windows.MessageBox.Show("Master Password has not been set, please set master password first.");
+                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+                smpw.ShowDialog();
                 return;
+            }
+            if (String.IsNullOrEmpty(FileEncryptor.PasswordHash))
+            {
+                
             }
             //if (string.IsNullOrEmpty(FileEncryptor.Salt))
             //{
@@ -209,15 +237,15 @@ namespace AccountsManager
             listboxuseraccounts.ScrollIntoView(listboxuseraccounts.SelectedItem);
         }
 
-        private void btnClickRefresh(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(txtFilePath.Text))
-            {
-                System.Windows.MessageBox.Show("Please select a file first, then try again.");
-                return;
-            }
-            ReadXmlFile(txtFilePath.Text);
-        }
+        //private void btnClickRefresh(object sender, RoutedEventArgs e)
+        //{
+        //    if (string.IsNullOrEmpty(txtFilePath.Text))
+        //    {
+        //        System.Windows.MessageBox.Show("Please select a file first, then try again.");
+        //        return;
+        //    }
+        //    ReadXmlFile(txtFilePath.Text);
+        //}
 
         private void btnClickAddUser(object sender, RoutedEventArgs e)
         {
@@ -260,6 +288,13 @@ namespace AccountsManager
 
         private void btnClickChangePassword(object sender, RoutedEventArgs e)
         {
+            if (String.IsNullOrEmpty(FileEncryptor.PasswordHash))
+            {
+                System.Windows.MessageBox.Show("No master password has been set yet, please set before attempting to change password");
+                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+                smpw.ShowDialog();
+                return;
+            }
             ChangePasswordWindow cpw = new ChangePasswordWindow();
             cpw.Show();           
         }
@@ -338,19 +373,19 @@ namespace AccountsManager
             WriteToXmlFile();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.MessageBox.Show("Please specify the directory in which you wish to create new accounts manager file.");
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string directoryName = fbd.SelectedPath;
-                string projectDirectoy = AppDomain.CurrentDomain.BaseDirectory;
-                File.Copy(projectDirectoy + @"\AccountsManagerUsers.xml", directoryName + @"\AccountsManagerUsers.xml");
-                File.Copy(projectDirectoy + @"\AccountsManager.xml", directoryName + @"\AccountsManager.xml");
-                //File.Copy(Directory.GetCurrentDirectory() + @"\AccountsManagerUsers.xml", directoryName + @"\AccountsManagerUsers.xml");
-                //File.Copy(Directory.GetCurrentDirectory() + @"\AccountsManager.xml", directoryName + @"\AccountsManager.xml");
-            }
-        }
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    System.Windows.MessageBox.Show("Please specify the directory in which you wish to create new accounts manager file.");
+        //    FolderBrowserDialog fbd = new FolderBrowserDialog();
+        //    if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        //    {
+        //        string directoryName = fbd.SelectedPath;
+        //        string projectDirectoy = AppDomain.CurrentDomain.BaseDirectory;
+        //        File.Copy(projectDirectoy + @"\AccountsManagerUsers.xml", directoryName + @"\AccountsManagerUsers.xml");
+        //        File.Copy(projectDirectoy + @"\AccountsManager.xml", directoryName + @"\AccountsManager.xml");
+        //        //File.Copy(Directory.GetCurrentDirectory() + @"\AccountsManagerUsers.xml", directoryName + @"\AccountsManagerUsers.xml");
+        //        //File.Copy(Directory.GetCurrentDirectory() + @"\AccountsManager.xml", directoryName + @"\AccountsManager.xml");
+        //    }
+        //}
     }
 }
