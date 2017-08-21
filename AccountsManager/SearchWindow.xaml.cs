@@ -40,7 +40,7 @@ namespace AccountsManager
                 System.Windows.MessageBox.Show("Please enter something to search for");
                 return;
             }
-            UserAccount ua = UserAccounts.Find(x => x.Domain.ToLower() == txtBoxSearch.Text.ToLower());
+            UserAccount ua = UserAccounts.Find(x => x.Domain.ToLower().Contains(txtBoxSearch.Text.ToLower()));
             if (ua == null)
             {
                 System.Windows.MessageBox.Show("No matches found");

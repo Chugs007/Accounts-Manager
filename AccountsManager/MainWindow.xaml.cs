@@ -5,6 +5,8 @@ using System.IO;
 using System.Xml;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
+using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace AccountsManager
 {
@@ -44,6 +46,8 @@ namespace AccountsManager
                 SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
                 smpw.ShowDialog();
             }
+            if (FileEncryptor.IsEncrypted)
+                lblStatus.Visibility = Visibility.Visible;
         }
     
 
@@ -86,11 +90,13 @@ namespace AccountsManager
                 }
             }           
             FileEncryptor.Encrypt(file, password, salt);
-            UserAccounts.Clear();         
+            UserAccounts.Clear();
+            lblStatus.Visibility = Visibility.Visible;
         }
 
         private void btnClickDecrypt(object sender, RoutedEventArgs e)
         {
+            lblStatus.Visibility = Visibility.Hidden;
             if (string.IsNullOrEmpty(txtFilePath.Text))
             {
                 System.Windows.MessageBox.Show("Please select a file first.");
@@ -235,6 +241,24 @@ namespace AccountsManager
         {
             listboxuseraccounts.SelectedItem = UserAccounts.First(x => x == user);
             listboxuseraccounts.ScrollIntoView(listboxuseraccounts.SelectedItem);
+            //Style styleBackground = new System.Windows.Style();
+            //styleBackground.TargetType = typeof(ListBoxItem);
+
+            ////Get the color and store it in a brush.           
+            //SolidColorBrush backgroundBrush = new SolidColorBrush();
+            //backgroundBrush.Color = Colors.Green;
+
+
+            ////Create a background setter and add the brush to it.
+            //styleBackground.Setters.Add(new Setter
+            //{
+            //    Property = ListBoxItem.BackgroundProperty,
+            //    Value = backgroundBrush
+            //});
+            //object selectedItem = listboxuseraccounts.SelectedItem;
+            //ListBoxItem lbi = listboxuseraccounts.ItemContainerGenerator.ContainerFromItem(selectedItem) as ListBoxItem;            
+            //lbi.Background = Brushes.Black;
+            
         }
 
         //private void btnClickRefresh(object sender, RoutedEventArgs e)
@@ -371,7 +395,23 @@ namespace AccountsManager
             listboxuseraccounts.ItemsSource = null;
             listboxuseraccounts.ItemsSource = UserAccounts;
             WriteToXmlFile();
+            
         }
+
+            
+        //{
+           
+        //    object selectedItem = listboxuseraccounts.SelectedItem;
+        //    if (selectedItem != null)
+        //    {
+        //        ListBoxItem lbi = listboxuseraccounts.ItemContainerGenerator.ContainerFromItem(selectedItem) as ListBoxItem;
+        //        lbi.Background = Brushes.Transparent;
+        //    }
+        //}
+
+
+
+
 
         //private void Button_Click(object sender, RoutedEventArgs e)
         //{
