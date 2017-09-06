@@ -27,3 +27,5 @@ C:\Users\ochug\Documents\Visual Studio 2013\Projects\AccountsManager\AccountsMan
 C:\Users\ochug\Documents\Visual Studio 2013\Projects\AccountsManager\AccountsManager\obj\Debug\AccountsManager.exe
 C:\Users\ochug\Documents\Visual Studio 2013\Projects\AccountsManager\AccountsManager\obj\Debug\AccountsManager.pdb
 C:\Users\ochug\Documents\Visual Studio 2013\Projects\AccountsManager\AccountsManager\obj\Debug\AccountsManager.csprojResolveAssemblyReference.cache
+C:\Users\ochug\Documents\Visual Studio 2013\Projects\AccountsManager\AccountsManager\bin\Debug\System.ValueTuple.dll
+C:\Users\ochug\Documents\Visual Studio 2013\Projects\AccountsManager\AccountsManager\bin\Debug\System.ValueTuple.xml

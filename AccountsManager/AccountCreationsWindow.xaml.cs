@@ -31,7 +31,10 @@ namespace AccountsManager
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(txtBoxUserName.Text) && string.IsNullOrEmpty(txtBoxPassword.Text) && string.IsNullOrEmpty(txtBoxDomain.Text))
+            {
+                MessageBox.Show("Please make sure all fields have been filled before attempting to add");
                 return;
+            }
             if (AddUserAccountEvent != null)
             {
                 if (AddUserAccountEvent != null)

@@ -19,7 +19,7 @@ namespace AccountsManager
     /// </summary>
     public partial class SearchWindow : Window
     {
-        public delegate void SearchForUserAccount(UserAccount user);
+        public delegate void SearchForUserAccount(UserAccount user);    
         public event SearchForUserAccount SearchForUserAccountEvent;
 
         public SearchWindow()
@@ -39,8 +39,8 @@ namespace AccountsManager
             {
                 System.Windows.MessageBox.Show("Please enter something to search for");
                 return;
-            }
-            UserAccount ua = UserAccounts.Find(x => x.Domain.ToLower().Contains(txtBoxSearch.Text.ToLower()));
+            }            
+            UserAccount ua = UserAccountsManager.getInstance().searchForUserAccount(txtBoxSearch.Text.ToLower());
             if (ua == null)
             {
                 System.Windows.MessageBox.Show("No matches found");

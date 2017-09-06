@@ -28,7 +28,7 @@ namespace AccountsManager
 
         public override string ToString()
         {
-            return string.Format(" {0}", Domain, UserName);
+            return string.Format(" {0}", Domain);
         }
     }
 }

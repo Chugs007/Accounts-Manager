@@ -42,6 +42,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,14 +66,17 @@
     <Compile Include="AccountCreationsWindow.xaml.cs">
       <DependentUpon>AccountCreationsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AccountsManagerConfigReader.cs" />
-    <Compile Include="AccountsManagerConfigWriter.cs" />
+    <Compile Include="AccountsManagerConfigFileParser.cs" />
+    <Compile Include="AccountsManagerConfigFileWriter.cs" />
+    <Compile Include="AccountsManagerFileParser.cs" />
+    <Compile Include="AccountsManagerFileWriter.cs" />
     <Compile Include="ChangeAccountWindow.xaml.cs">
       <DependentUpon>ChangeAccountWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MasterPasswordManager.cs" />
     <Compile Include="SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
@@ -78,6 +84,7 @@
       <DependentUpon>SetMasterPasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserAccount.cs" />
+    <Compile Include="UserAccountsManager.cs" />
     <Page Include="AccountCreationsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -146,6 +153,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.manifest" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

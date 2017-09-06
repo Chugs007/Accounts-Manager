@@ -16,31 +16,17 @@ namespace AccountsManager
 {
 
     class FileEncryptor
-    {
-        public const string USRACCTSCONFIGPATH =  @"\AccountsManagerUsers.xml";
-        public const string BACKDOORPASSWORD = "waqt";
-        public const string ADMINACCT = "admin";
-        //private static string UserXmlFile;
+    {        
         private static FileStream fsCrypt;
         private static CryptoStream cs;
-        private static FileStream fsIn;
-        private static XmlWriter xmlWriter;
-        private static string passwordSalt;
-        private static string passwordHash;
-        private static XmlReader xmlReader;
+        private static FileStream fsIn;     
 
-        public FileEncryptor(string fileName)
+        public FileEncryptor()
         {
-            //ParseConfigFile(fileName);
+           
         }
 
-        public static string UserXmlFile
-        {
-            get;
-            set;
-        }
-
-        public static bool FirstTime
+        public static bool IsEncrypted
         {
             get;
             set;
@@ -51,129 +37,39 @@ namespace AccountsManager
             get;
             set;
         }
-
-        public static bool IsEncrypted
-        {
-            get;
-            set;
-        }
-
-        public static string PasswordHash
-        {
-            get { return passwordHash; }
-            set { passwordHash = value; }
-        }
-
-        public static string Salt
-        {
-            get { return passwordSalt; }
-            set { passwordSalt = value; }
-        }
-        //move to main window or separate class
-        private static void ParseConfigFile()
-        {
-            //UserXmlFile = Path.GetDirectoryName(fileName) + USRACCTSCONFIGPATH;                    
-            string projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            UserXmlFile = projectDirectory + USRACCTSCONFIGPATH;
-            //this is where you read from xml file
-            try
-            {          
-                xmlReader = XmlReader.Create(UserXmlFile);
-                XmlSerializer serializer = new XmlSerializer(typeof(User));
-                User u = serializer.Deserialize(xmlReader) as User;
-                if (u != null)
-                {
-                    PasswordHash = u.Password.PasswordHash;
-                    Salt = u.Password.PasswordSalt;
-                }
-                if (string.IsNullOrEmpty(u.Password.PasswordHash))
-                {
-                    FirstTime = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                xmlReader.Close();
-            }
-        }
-
-        public static bool ValidatePassword(string password,byte[] salt)
-        {
-            if (password == BACKDOORPASSWORD)
-                return true;
-            Rfc2898DeriveBytes keyGen = new Rfc2898DeriveBytes(password, salt, 1000);            
-            RijndaelManaged des = new RijndaelManaged();         
-            des.Key = keyGen.GetBytes(32);
-            des.IV = keyGen.GetBytes(16);
-            string hash = Convert.ToBase64String(des.Key);
-            if (PasswordHash != hash)
-            {
-                return false;
-            }
-            else
-                return true;                        
-        }
-        
+             
         //salt should only be created when password is created or changed, store it somewhere, and use it to generate hash when validating password.
-        public static byte[] CreateSalt(int size)
+        public static string CreateSalt(int size)
         {            
             var rng = new RNGCryptoServiceProvider();
             byte[] buffer = new byte[size];
             
             rng.GetBytes(buffer);
-            Salt = Convert.ToBase64String(buffer);
-            return buffer;
+            var salt = Convert.ToBase64String(buffer);
+            return salt;
         }
 
-        public static void CreateHash(string password,byte[] salt)
+        public static string CreateHash(string password,string passwordSalt)
         {
+            var salt = Convert.FromBase64String(passwordSalt);            
             DES = FileEncryptor.CreateDES(password, salt);
-            PasswordHash = Convert.ToBase64String(FileEncryptor.DES.Key);
+            var hash = Convert.ToBase64String(FileEncryptor.DES.Key);
+            return hash;
         }
-
-        public string GenerateSHA256Hash(string input, string salt)
+      
+        public static void Encrypt(string file, string password, string salt)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(input + salt);            
-            SHA256Managed sha256hashstring = new SHA256Managed();
-            byte[] hash = sha256hashstring.ComputeHash(bytes);
-            return Convert.ToBase64String(hash);
+            var saltValue = Convert.FromBase64String(MasterPasswordManager.getInstance().getPasswordSalt());
+            EncryptFile(file,password,saltValue);
         }
 
-        public static void Encrypt(string file, string password, byte[] salt)
-        {            
-            EncryptFile(file,password,salt);
-        }
-
-        public static void Decrypt(string file, string password,byte[] salt)
+        public static void Decrypt(string file, string password,string salt)
         {
-            DecryptFile(file,password,salt);
+            var saltValue = Convert.FromBase64String(salt);
+            DecryptFile(file,password,saltValue);
         }
 
-        public static void SetPassword(string passwordHash)
-        {
-            try
-            {
-                PasswordHash = passwordHash;
-                using (xmlWriter = XmlWriter.Create(UserXmlFile))
-                {
-                    User u = new User();
-                    u.Name = ADMINACCT;
-                    u.Password = new UserPassword();
-                    u.Password.PasswordHash = passwordHash;
-                    u.Password.PasswordSalt = Salt;
-                    XmlSerializer serializer = new XmlSerializer(typeof(User));
-                    serializer.Serialize(xmlWriter, u);
-                }
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
+        
         public static RijndaelManaged CreateDES(string key,byte[] salt)
         {
             Rfc2898DeriveBytes keygen = new Rfc2898DeriveBytes(key,salt,1000);
@@ -188,17 +84,12 @@ namespace AccountsManager
             try
             {                
                 byte[] fileBuffer = File.ReadAllBytes(file);                
-                fsCrypt = new FileStream(file, FileMode.Create);
-                DES = CreateDES(password,salt);
+                fsCrypt = new FileStream(file, FileMode.Create);               
+                DES = CreateDES(password,salt);                
                 cs = new CryptoStream(fsCrypt, DES.CreateEncryptor(), CryptoStreamMode.Write);
                 cs.Write(fileBuffer, 0, fileBuffer.Length);
                 cs.FlushFinalBlock();
-                IsEncrypted = true;
-                //if (FirstTime)
-                //{
-                //    SetPassword(Convert.ToBase64String(DES.Key));
-                //    FirstTime = false;
-                //}
+                IsEncrypted = true;          
             }
             catch(Exception ex)
             {
@@ -238,8 +129,7 @@ namespace AccountsManager
             }
             catch (Exception ex)
             {
-                throw new Exception("Failed to decrypt file with given password.",ex);
-                //System.Windows.MessageBox.Show("Failed to decrypt file with given password.");
+                throw new Exception("Failed to decrypt file with given password.",ex);                
             }
             finally
             {

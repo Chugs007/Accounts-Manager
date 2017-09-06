@@ -10,12 +10,12 @@ using System.Windows;
 
 namespace AccountsManager
 {
-    class AccountsManagerConfigReader
+    class AccountsManagerConfigFileParser
     {
 
         private string filePath = String.Empty;
 
-        public AccountsManagerConfigReader(String fileName)
+        public AccountsManagerConfigFileParser(String fileName)
         {
             if (String.IsNullOrEmpty(fileName))
             {
@@ -28,13 +28,14 @@ namespace AccountsManager
             filePath = fileName;
         }
 
-        
-        public void readConfigFile()
-        {
+        public (string passwordHash, string salt) parseaccountsConfigFile()
+        {            
             if (String.IsNullOrEmpty(filePath))
             {
 
             }
+            string passwordHash = string.Empty;
+            string salt = string.Empty;
             XmlReader xmlReader = null;
             try
             {
@@ -42,12 +43,12 @@ namespace AccountsManager
                 XmlSerializer serializer = new XmlSerializer(typeof(User));
                 User u = serializer.Deserialize(xmlReader) as User;
                 if (u != null)
-                {
-                    FileEncryptor.PasswordHash = u.Password.PasswordHash;
-                    FileEncryptor.Salt = u.Password.PasswordSalt;
+                {                   
+                    passwordHash = u.Password.PasswordHash;
+                    salt = u.Password.PasswordSalt;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -55,6 +56,8 @@ namespace AccountsManager
             {
                 xmlReader.Close();
             }
+
+            return (passwordHash, salt);
         }
     }
 }

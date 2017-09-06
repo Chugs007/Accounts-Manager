@@ -24,7 +24,6 @@ namespace AccountsManager
             InitializeComponent();
         }
 
-
         private bool MasterPasswordSet = false;
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -34,11 +33,8 @@ namespace AccountsManager
             {
                 MessageBox.Show("Please enter a valid password!");
                 return;
-            }
-            byte[] salt = FileEncryptor.CreateSalt(10);
-            salt = Convert.FromBase64String(FileEncryptor.Salt);
-            FileEncryptor.DES = FileEncryptor.CreateDES(inputPassword, salt);           
-            FileEncryptor.SetPassword(Convert.ToBase64String(FileEncryptor.DES.Key));
+            }            
+            MasterPasswordManager.getInstance().setPassword(inputPassword);
             MasterPasswordSet = true;
             this.Close();
             MessageBox.Show("Master Password has been set!");
