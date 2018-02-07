@@ -11,9 +11,9 @@ namespace AccountsManager
     {
         public const string ADMINACCT = "admin";
         public const string BACKDOORPASSWORD = "waqt";
-        private string passwordHash;
-        private string passwordSalt;
-        private string configXmlFilePath;
+        private static string passwordHash;
+        private static string passwordSalt;
+        private static string configXmlFilePath;
         AccountsManagerConfigFileParser amcp;
         AccountsManagerConfigFileWriter amcw;
         private static MasterPasswordManager instance;
@@ -25,13 +25,7 @@ namespace AccountsManager
             var configFileData = amcp.parseaccountsConfigFile();
             passwordHash = configFileData.passwordHash;
             passwordSalt = configFileData.salt;
-            amcw = new AccountsManagerConfigFileWriter(configXmlFile);
-            if (String.IsNullOrEmpty(passwordHash))
-            {
-                System.Windows.MessageBox.Show("No master password has been set yet. " + Environment.NewLine + "Please enter a master password to be used to encrypt file.");
-                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
-                smpw.ShowDialog();
-            }
+            amcw = new AccountsManagerConfigFileWriter(configXmlFile);            
         }
 
         public static MasterPasswordManager getInstance(string filePath= "")
@@ -39,6 +33,12 @@ namespace AccountsManager
             if (instance == null)
             {
                 instance = new MasterPasswordManager(filePath);
+                if (String.IsNullOrEmpty(passwordHash))
+                {
+                    System.Windows.MessageBox.Show("No master password has been set yet. " + Environment.NewLine + "Please enter a master password to be used to encrypt file.");
+                    SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+                    smpw.ShowDialog();
+                }
             }
             return instance;
         }

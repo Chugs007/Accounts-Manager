@@ -85,7 +85,7 @@ namespace AccountsManager
             {                
                 byte[] fileBuffer = File.ReadAllBytes(file);                
                 fsCrypt = new FileStream(file, FileMode.Create);               
-                DES = CreateDES(password,salt);                
+                DES = CreateDES(password,salt);                                
                 cs = new CryptoStream(fsCrypt, DES.CreateEncryptor(), CryptoStreamMode.Write);
                 cs.Write(fileBuffer, 0, fileBuffer.Length);
                 cs.FlushFinalBlock();
