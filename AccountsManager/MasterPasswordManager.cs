@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,23 +11,23 @@ namespace AccountsManager
 {
     public class MasterPasswordManager
     {
-        public const string ADMINACCT = "admin";
-        public const string BACKDOORPASSWORD = "waqt";
+        public const string ADMINACCT = "admin";        
         private static string passwordHash;
         private static string passwordSalt;
         private static string configXmlFilePath;
-        AccountsManagerConfigFileParser amcp;
-        AccountsManagerConfigFileWriter amcw;
-        private static MasterPasswordManager instance;
+        private AccountsManagerConfigFileParser amcp;
+        private AccountsManagerConfigFileWriter amcw;
+        private static MasterPasswordManager instance;        
 
         private MasterPasswordManager(string configXmlFile)
         {            
             configXmlFilePath = configXmlFile;
-            amcp = new AccountsManagerConfigFileParser(configXmlFile);            
+            amcp = new AccountsManagerConfigFileParser(configXmlFile);
+            amcw = new AccountsManagerConfigFileWriter(configXmlFile);
             var configFileData = amcp.parseaccountsConfigFile();
             passwordHash = configFileData.passwordHash;
             passwordSalt = configFileData.salt;
-            amcw = new AccountsManagerConfigFileWriter(configXmlFile);            
+            
         }
 
         public static MasterPasswordManager getInstance(string filePath= "")
@@ -54,9 +56,14 @@ namespace AccountsManager
         }       
 
         public bool validatePaswword(string password)
-        {
-            if (password == BACKDOORPASSWORD)
-                return true;
+        {                  
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            if (File.Exists(config.AppSettings.File))
+            {
+                var backDoorPassword = config.AppSettings.Settings["backDoorPassword"].Value;
+                if (password == backDoorPassword)
+                    return true;
+            }
             FileEncryptor.CreateHash(password, passwordSalt);
             string hash = Convert.ToBase64String(FileEncryptor.DES.Key);
             if (passwordHash == hash)            

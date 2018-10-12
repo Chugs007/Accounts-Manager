@@ -1,3 +1,9 @@
-/AccountsManager/bin/*
-/AccountsManager/obj/*
-.vs
+#Build output
+[Bb]in/
+[Oo]bj/
+
+Visual Studio 2017 options directory
+.vs/
+
+#User-specific files
+*.suo

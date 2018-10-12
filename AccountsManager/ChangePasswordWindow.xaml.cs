@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,8 +38,18 @@ namespace AccountsManager
             {
                 System.Windows.MessageBox.Show("Please enter the new password!");
                 return;
-            }          
-            var correctPassword = MasterPasswordManager.getInstance().validatePaswword(pswrdBoxOld.Password)  || (pswrdBoxOld.Password == MasterPasswordManager.BACKDOORPASSWORD);
+            }
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var backDoorPassword = String.Empty;
+            if (File.Exists(config.AppSettings.File))
+            {
+                backDoorPassword = config.AppSettings.Settings["backDoorPassword"].Value;
+
+            }            
+            bool correctPassword = MasterPasswordManager.getInstance().validatePaswword(pswrdBoxOld.Password);
+            if (!String.IsNullOrEmpty(backDoorPassword)   && !correctPassword)
+                correctPassword = pswrdBoxOld.Password == backDoorPassword;
+
             if (!correctPassword)
             {
                 System.Windows.MessageBox.Show("Old Password is not correct!");

@@ -17,13 +17,10 @@ namespace AccountsManager
 
         public AccountsManagerConfigFileParser(String fileName)
         {
-            if (String.IsNullOrEmpty(fileName))
+            if (String.IsNullOrEmpty(fileName) || !File.Exists(fileName))
             {
-                
-            }
-            if (!File.Exists(fileName))
-            {
-
+                MessageBox.Show("Accounts Manager Config File does not exist.");
+                return;
             }
             filePath = fileName;
         }
