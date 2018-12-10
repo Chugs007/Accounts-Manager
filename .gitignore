@@ -2,12 +2,14 @@
 [Bb]in/
 [Oo]bj/
 
-Visual Studio 2017 options directory
+#Visual Studio 2017 options directory
 .vs/
 
 #User-specific files
 *.suo
 
+#Config settings
+AccountsManager/AcctsMgrConfig.config
 
 # NuGet Packages
 *.nupkg

@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace AccountsManager
 {
-    public class UserAccountsManager
+    public sealed class UserAccountsManager
     {
         private ObservableCollection<UserAccount> userAccounts;
         private AccountsManagerFileParser amfp;
         private AccountsManagerFileWriter amfw;
         private UserAccount currentUserAccount;
-        private static UserAccountsManager instance;
+        private static string filePath;
+        private static Lazy<UserAccountsManager> lazy = new Lazy<UserAccountsManager>(() => new UserAccountsManager(filePath));
 
         private UserAccountsManager(string filePath)
         {
@@ -24,11 +25,8 @@ namespace AccountsManager
 
         public static UserAccountsManager getInstance(string filePath = "")
         {
-            if (instance == null)
-            {
-                instance = new UserAccountsManager(filePath);
-            }
-            return instance;
+            UserAccountsManager.filePath = filePath;
+            return lazy.Value;
         }
 
         public UserAccount CurrentUserAccount

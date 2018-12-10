@@ -26,8 +26,7 @@ namespace AccountsManager
             amcw = new AccountsManagerConfigFileWriter(configXmlFile);
             var configFileData = amcp.parseaccountsConfigFile();
             passwordHash = configFileData.passwordHash;
-            passwordSalt = configFileData.salt;
-            
+            passwordSalt = configFileData.salt;            
         }
 
         public static MasterPasswordManager getInstance(string filePath= "")
