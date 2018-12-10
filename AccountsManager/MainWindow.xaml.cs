@@ -35,7 +35,13 @@ namespace AccountsManager
             projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
 #endif
             txtFilePath.Text = projectDirectory + ACCTSMGRFILEPATH;                       
-            MasterPasswordManager.getInstance(projectDirectory + ACCTSMGRUSERSCONFIGPATH);            
+            MasterPasswordManager.getInstance(projectDirectory + ACCTSMGRUSERSCONFIGPATH);
+            if (String.IsNullOrEmpty(MasterPasswordManager.getInstance().getPasswordHash()))
+            {
+                System.Windows.MessageBox.Show("No master password has been set yet. " + Environment.NewLine + "Please enter a master password to be used to encrypt file.");
+                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+                smpw.ShowDialog();
+            }
             if (!FileEncryptor.IsEncrypted)
                 lblStatus.Visibility = Visibility.Hidden;            
             UserAccountsManager.getInstance(projectDirectory + ACCTSMGRFILEPATH);
