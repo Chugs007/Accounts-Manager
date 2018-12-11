@@ -44,11 +44,9 @@
                 <RowDefinition Height="auto" MinHeight="70"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <!--<Button Content="Browse" Grid.Row="1" Margin="10,10,0,0" HorizontalAlignment="Left" Height="36"  VerticalAlignment="Top" Width="93" Click="btnClickBrowse"/>-->
             <Button Content="Encrypt"  Grid.Row="0"  Grid.Column="0" HorizontalAlignment="Center" Height="36"  VerticalAlignment="Center" Width="93" Click="btnClickEncrypt"/>
             <Button Content="Decrypt" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Height="36"  VerticalAlignment="Center" Width="98" Click="btnClickDecrypt"/>
             <Button Content="Show Account Information"  Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Height="40" VerticalAlignment="Center"  Width="154" Click="btnClickShowInformation"/>
-            <!--<Button Content="Create New " Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Height="36" Margin="10,10,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click"/>-->
         </Grid>
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
@@ -122,22 +120,6 @@
             </ListBox>
             <Label x:Name="lblStatus" Grid.ColumnSpan="2" Grid.Row="1"  HorizontalAlignment="Left" FontSize="36" Content="File is Encrypted" Visibility="Visible">
             </Label>
-            <!--<Label x:Name="lblStatus" Grid.ColumnSpan="2" Grid.Row="1"  HorizontalAlignment="Center" FontSize="36" Content="File is Encrypted" Visibility="Hidden">
-                <Label.Style>
-                    <Style TargetType="{x:Type Label}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Source={x:Static local:FileEncryptor.IsEncrypted}}"  Value="true">
-                        <Setter Property="Visibility"  Value="Visible">
-                        </Setter>
-                    </DataTrigger>
-                            <DataTrigger Binding="{Binding Source={x:Static local:FileEncryptor.IsEncrypted}}"  Value="false">
-                                <Setter Property="Visibility" Value="Hidden"></Setter>
-                            </DataTrigger>
-                </Style.Triggers>
-                    </Style>
-                </Label.Style>
-            </Label>-->
-
         </Grid>
         <Label x:Name="lblLoading" Content="Loading please wait..." Visibility="Hidden" Grid.ColumnSpan="3" FontSize="40"  HorizontalAlignment="Center"  Height="85"  VerticalAlignment="Center" Width="441"/>
     </Grid>

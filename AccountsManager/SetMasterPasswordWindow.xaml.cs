@@ -28,7 +28,7 @@ namespace AccountsManager
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            String inputPassword = txtBoxPassword.Text;
+            String inputPassword = txtBoxPassword.Password;
             if (String.IsNullOrEmpty(inputPassword))
             {
                 MessageBox.Show("Please enter a valid password!");
@@ -45,15 +45,15 @@ namespace AccountsManager
             if (!MasterPasswordSet)
             {
                 MessageBoxResult mbr= MessageBox.Show("Master password must be set before using application. " +
-                    "Select yes if you wish to proceed, otherwise no to input a master password.", "", MessageBoxButton.YesNo);
+                "Select yes if you wish to set master password, otherwise select no to exit application.", "", MessageBoxButton.YesNo);
                 if (mbr == MessageBoxResult.Yes)
-                {
-                    return;
-                }
-                else
                 {
                     SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
                     smpw.ShowDialog();
+                }
+                else
+                {
+                    Application.Current.Shutdown();
                 }
             }
         }

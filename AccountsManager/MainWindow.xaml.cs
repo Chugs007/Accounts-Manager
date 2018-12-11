@@ -34,18 +34,49 @@ namespace AccountsManager
 #else
             projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
 #endif
-            txtFilePath.Text = projectDirectory + ACCTSMGRFILEPATH;                       
-            MasterPasswordManager.getInstance(projectDirectory + ACCTSMGRUSERSCONFIGPATH);
-            if (String.IsNullOrEmpty(MasterPasswordManager.getInstance().getPasswordHash()))
+            txtFilePath.Text = projectDirectory + ACCTSMGRFILEPATH;
+            try
             {
-                System.Windows.MessageBox.Show("No master password has been set yet. " + Environment.NewLine + "Please enter a master password to be used to encrypt file.");
-                SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
-                smpw.ShowDialog();
+                if (String.IsNullOrEmpty(projectDirectory + ACCTSMGRUSERSCONFIGPATH) || !File.Exists(projectDirectory + ACCTSMGRUSERSCONFIGPATH))
+                {
+                    throw new FileNotFoundException("Accounts Manager can't find specified config file " + projectDirectory + ACCTSMGRUSERSCONFIGPATH + " Application will now shutdown.");
+
+                }
+                if (String.IsNullOrEmpty(projectDirectory + ACCTSMGRFILEPATH) || !File.Exists(projectDirectory + ACCTSMGRFILEPATH))
+                {
+                    throw new FileNotFoundException("Accounts Manager can't find specified config file " + projectDirectory + ACCTSMGRFILEPATH + " Application will now shutdown.");
+                }
+                MasterPasswordManager.getInstance(projectDirectory + ACCTSMGRUSERSCONFIGPATH);
+                if (String.IsNullOrEmpty(MasterPasswordManager.getInstance().getPasswordHash()))
+                {
+                    System.Windows.MessageBox.Show("No master password has been set yet. " + Environment.NewLine + "Please enter a master password to be used to encrypt file.");
+                    SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
+                    smpw.ShowDialog();
+                }
+                if (!FileEncryptor.IsEncrypted)
+                    lblStatus.Visibility = Visibility.Hidden;
+                UserAccountsManager.getInstance(projectDirectory + ACCTSMGRFILEPATH);
+                listboxuseraccounts.ItemsSource = UserAccountsManager.getInstance().getUserAccounts();
             }
-            if (!FileEncryptor.IsEncrypted)
-                lblStatus.Visibility = Visibility.Hidden;            
-            UserAccountsManager.getInstance(projectDirectory + ACCTSMGRFILEPATH);
-            listboxuseraccounts.ItemsSource = UserAccountsManager.getInstance().getUserAccounts();
+            catch (FileNotFoundException fex)
+            {
+                Window WpfBugWindow = new Window()
+                {
+                    AllowsTransparency = true,
+                    Background = System.Windows.Media.Brushes.Transparent,
+                    WindowStyle = WindowStyle.None,
+                    Top = 0,
+                    Left = 0,
+                    Width = 1,
+                    Height = 1,
+                    ShowInTaskbar = false
+                };
+
+                WpfBugWindow.Show();
+                System.Windows.MessageBox.Show(fex.Message);
+                WpfBugWindow.Close();
+                System.Windows.Application.Current.Shutdown();
+            }
         }
     
         private void btnClickEncrypt(object sender, RoutedEventArgs e)
@@ -62,7 +93,7 @@ namespace AccountsManager
                 System.Windows.MessageBox.Show("File is already encrypted.");
                 return;                
             }            
-            if (string.IsNullOrEmpty(txtFilePath.Text)) //shouldn't ever happen?
+            if (string.IsNullOrEmpty(txtFilePath.Text)) 
             {
                 System.Windows.MessageBox.Show("Please select a user accounts file first.");
                 return;

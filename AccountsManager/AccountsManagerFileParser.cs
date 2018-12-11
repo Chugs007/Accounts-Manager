@@ -36,14 +36,11 @@ namespace AccountsManager
                
                 FileEncryptor.IsEncrypted = false;                
             }
-            catch (Exception ex)
+            catch (XmlException ex)
             {
-                if (ex.GetType() == typeof(XmlException))
-                {
-                    System.Windows.MessageBox.Show("File is encrypted please enter a password in password box and click decrypt, then refresh.");
-                    FileEncryptor.IsEncrypted = true;
-                    return userAccounts;
-                }
+                (System.Windows.Application.Current.MainWindow as MainWindow).lblStatus.Visibility = System.Windows.Visibility.Visible;
+                FileEncryptor.IsEncrypted = true;
+                return userAccounts;                
             }
             return userAccounts;
         }

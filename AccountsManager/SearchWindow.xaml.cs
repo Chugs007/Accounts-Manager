@@ -37,13 +37,13 @@ namespace AccountsManager
         {
             if (string.IsNullOrEmpty(txtBoxSearch.Text))
             {
-                System.Windows.MessageBox.Show("Please enter something to search for");
+                MessageBox.Show("Please enter something to search for");
                 return;
             }            
             UserAccount ua = UserAccountsManager.getInstance().searchForUserAccount(txtBoxSearch.Text.ToLower());
             if (ua == null)
             {
-                System.Windows.MessageBox.Show("No matches found");
+                MessageBox.Show("No matches found");
                 return;
             }
 

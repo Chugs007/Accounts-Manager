@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AccountsManager
 {
@@ -19,13 +20,13 @@ namespace AccountsManager
         private AccountsManagerConfigFileWriter amcw;        
         private static Lazy<MasterPasswordManager> instance = new Lazy<MasterPasswordManager>(( ) => new MasterPasswordManager(configXmlFilePath));
 
-        private MasterPasswordManager(string configXmlFile)
+        private MasterPasswordManager(string configXmlFile)  
         {            
             amcp = new AccountsManagerConfigFileParser(configXmlFile);
             amcw = new AccountsManagerConfigFileWriter(configXmlFile);
-            var configFileData = amcp.parseaccountsConfigFile();
+            var configFileData = amcp.parseFile();
             passwordHash = configFileData.passwordHash;
-            passwordSalt = configFileData.salt;            
+            passwordSalt = configFileData.salt;                      
         }
 
         public static MasterPasswordManager getInstance(string filePath= "")
@@ -66,7 +67,7 @@ namespace AccountsManager
             var correctPassword = validatePaswword(oldPassword);
             if (!correctPassword)
             {
-                System.Windows.MessageBox.Show("Old Password is not correct!");
+                MessageBox.Show("Old Password is not correct!");
                 return;
             }
             else

@@ -19,27 +19,18 @@ namespace AccountsManager
 
         }
 
-
         public void WriteToFile(string passwordHash, string salt)
-        {
-            try
+        {            
+            using (XmlWriter xmlWriter = XmlWriter.Create(acctMgrConfigFilePath))
             {
-                XmlWriter xmlWriter;
-                using (xmlWriter = XmlWriter.Create(acctMgrConfigFilePath))
-                {
-                    User u = new User();
-                    u.Name = MasterPasswordManager.ADMINACCT; 
-                    u.Password = new UserPassword();
-                    u.Password.PasswordHash = passwordHash;
-                    u.Password.PasswordSalt = salt;
-                    XmlSerializer serializer = new XmlSerializer(typeof(User));
-                    serializer.Serialize(xmlWriter, u);
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+                User u = new User();
+                u.Name = MasterPasswordManager.ADMINACCT; 
+                u.Password = new UserPassword();
+                u.Password.PasswordHash = passwordHash;
+                u.Password.PasswordSalt = salt;
+                XmlSerializer serializer = new XmlSerializer(typeof(User));
+                serializer.Serialize(xmlWriter, u);
+            }                      
         }
     }
 }

@@ -16,42 +16,23 @@ namespace AccountsManager
         private string filePath = String.Empty;
 
         public AccountsManagerConfigFileParser(String fileName)
-        {
-            if (String.IsNullOrEmpty(fileName) || !File.Exists(fileName))
-            {
-                MessageBox.Show("Accounts Manager Config File does not exist.");
-                return;
-            }
+        {            
             filePath = fileName;
         }
 
-        public (string passwordHash, string salt) parseaccountsConfigFile()
+        public (string passwordHash, string salt) parseFile()
         {            
-            if (String.IsNullOrEmpty(filePath))
-            {
-
-            }
             string passwordHash = string.Empty;
             string salt = string.Empty;
-            XmlReader xmlReader = null;
-            try
-            {
-                xmlReader = XmlReader.Create(filePath);
+            using (XmlReader xmlReader = XmlReader.Create(filePath))
+            {                 
                 XmlSerializer serializer = new XmlSerializer(typeof(User));
                 User u = serializer.Deserialize(xmlReader) as User;
                 if (u != null)
                 {                   
                     passwordHash = u.Password.PasswordHash;
                     salt = u.Password.PasswordSalt;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                xmlReader.Close();
+                }            
             }
 
             return (passwordHash, salt);

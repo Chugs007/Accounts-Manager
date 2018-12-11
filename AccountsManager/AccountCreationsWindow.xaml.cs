@@ -37,13 +37,8 @@ namespace AccountsManager
             }
             if (AddUserAccountEvent != null)
             {
-                if (AddUserAccountEvent != null)
-                {
-                    AddUserAccountEvent(txtBoxUserName.Text, txtBoxPassword.Text, txtBoxDomain.Text);
-                }
-                
+                AddUserAccountEvent?.Invoke(txtBoxUserName.Text, txtBoxPassword.Text, txtBoxDomain.Text);
             }
-
             this.Close();
         }
     }

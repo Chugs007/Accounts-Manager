@@ -35,10 +35,7 @@ namespace AccountsManager
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (ChangeAccountInfoEvent != null)
-            {
-                ChangeAccountInfoEvent(txtBoxDomain.Text, txtBoxUserName.Text, txtBoxPassword.Text);
-            }
+            ChangeAccountInfoEvent?.Invoke(txtBoxDomain.Text, txtBoxUserName.Text, txtBoxPassword.Text);
             this.Close();
         }
 

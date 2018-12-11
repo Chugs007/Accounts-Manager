@@ -12,7 +12,6 @@ namespace AccountsManager
         private ObservableCollection<UserAccount> userAccounts;
         private AccountsManagerFileParser amfp;
         private AccountsManagerFileWriter amfw;
-        private UserAccount currentUserAccount;
         private static string filePath;
         private static Lazy<UserAccountsManager> lazy = new Lazy<UserAccountsManager>(() => new UserAccountsManager(filePath));
 
@@ -29,17 +28,7 @@ namespace AccountsManager
             return lazy.Value;
         }
 
-        public UserAccount CurrentUserAccount
-        {
-            get
-            {
-                return currentUserAccount;
-            }
-            set
-            {
-                currentUserAccount = value;
-            }
-        }
+        public UserAccount CurrentUserAccount { get; set; }
 
         private void sortUserAccounts()
         {

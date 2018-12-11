@@ -14,29 +14,7 @@ namespace AccountsManager
         public AccountsManagerFileWriter(string filePath)
         {
             this.filePath = filePath;
-        }
-
-        public void writeAccountToFile(UserAccount account)
-        {
-            string user = account.UserName;
-            string password = account.Password;
-            string domain = account.Domain;
-            XmlDocument xmldocument = new XmlDocument();
-            xmldocument.Load(filePath);
-            XmlNode xmlnode = xmldocument.CreateNode("element", "UserAccount", "");
-            XmlNode userNameNode = xmldocument.CreateNode("element", "UserName", "");
-            userNameNode.InnerText = user;
-            xmlnode.AppendChild(userNameNode);
-            XmlNode passwordNode = xmldocument.CreateNode("element", "Password", "");
-            passwordNode.InnerText = password;
-            xmlnode.AppendChild(passwordNode);
-            XmlNode domainNode = xmldocument.CreateNode("element", "Domain", "");
-            domainNode.InnerText = domain;
-            xmlnode.AppendChild(domainNode);
-            XmlElement rootelement = xmldocument.DocumentElement;
-            rootelement.AppendChild(xmlnode);
-            xmldocument.Save(filePath);
-        }
+        }      
 
         public void writeAccountsToFile(List<UserAccount> userAccounts)
         {

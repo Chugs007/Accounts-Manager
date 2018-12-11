@@ -31,12 +31,12 @@ namespace AccountsManager
         {
             if (string.IsNullOrEmpty(pswrdBoxOld.Password))
             {
-                System.Windows.MessageBox.Show("Please enter the old password!");
+                MessageBox.Show("Please enter the old password!");
                 return;
             }
             if (string.IsNullOrEmpty(pswrdBoxNew.Password))
             {
-                System.Windows.MessageBox.Show("Please enter the new password!");
+                MessageBox.Show("Please enter the new password!");
                 return;
             }
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -52,13 +52,13 @@ namespace AccountsManager
 
             if (!correctPassword)
             {
-                System.Windows.MessageBox.Show("Old Password is not correct!");
+                MessageBox.Show("Old Password is not correct!");
                 return;
             }
             else
             {             
                 MasterPasswordManager.getInstance().setPassword(pswrdBoxNew.Password);
-                System.Windows.MessageBox.Show("Master password has been changed!");
+                MessageBox.Show("Master password has been changed!");
                 this.Close();
             }
 

@@ -72,8 +72,9 @@ namespace AccountsManager
         
         public static RijndaelManaged CreateDES(string key,byte[] salt)
         {
-            Rfc2898DeriveBytes keygen = new Rfc2898DeriveBytes(key,salt,1000);
+            Rfc2898DeriveBytes keygen = new Rfc2898DeriveBytes(key,salt,1000);            
             RijndaelManaged des = new RijndaelManaged();
+            Console.WriteLine(des.BlockSize);
             des.Key = keygen.GetBytes(32);            
             des.IV = keygen.GetBytes(16);            
             return des;
@@ -90,11 +91,7 @@ namespace AccountsManager
                 cs.Write(fileBuffer, 0, fileBuffer.Length);
                 cs.FlushFinalBlock();
                 IsEncrypted = true;          
-            }
-            catch(Exception ex)
-            {
-                System.Windows.MessageBox.Show("Failed to encrypt file with given password. Error: " + ex.Message + ".");
-            }
+            }          
             finally
             {
                 if (fsCrypt != null)
@@ -126,11 +123,7 @@ namespace AccountsManager
                     fsIn.WriteByte((byte)data);
                 }
                 IsEncrypted = false;                       
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed to decrypt file with given password.",ex);                
-            }
+            }          
             finally
             {
                 if (fsIn != null)

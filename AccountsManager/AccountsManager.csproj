@@ -112,7 +112,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileEncryptor.cs" />
-    <Compile Include="IEncryptor.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -141,7 +140,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="Resources\acctsmgrsplash.png" />
-    <Resource Include="Resources\AccountsManagerSplash.png" />
     <Resource Include="Security.ico" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -176,7 +174,7 @@
   <ItemGroup>
     <Content Include="AccountsManager.xml">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
