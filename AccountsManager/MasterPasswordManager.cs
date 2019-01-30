@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace AccountsManager
@@ -13,8 +6,8 @@ namespace AccountsManager
     public class MasterPasswordManager
     {
         public const string ADMINACCT = "admin";        
-        private static string passwordHash;
-        private static string passwordSalt;
+        private string passwordHash;
+        private string passwordSalt;
         private static string configXmlFilePath;
         private AccountsManagerConfigFileParser amcp;
         private AccountsManagerConfigFileWriter amcw;        
@@ -22,11 +15,13 @@ namespace AccountsManager
 
         private MasterPasswordManager(string configXmlFile)  
         {            
+            configXmlFilePath = configXmlFile; 
             amcp = new AccountsManagerConfigFileParser(configXmlFile);
-            amcw = new AccountsManagerConfigFileWriter(configXmlFile);
-            var configFileData = amcp.parseFile();
+            amcw = new AccountsManagerConfigFileWriter(configXmlFile);            
+            var configFileData = amcp.parseFile();                                        
             passwordHash = configFileData.passwordHash;
-            passwordSalt = configFileData.salt;                      
+            passwordSalt = configFileData.salt;            
+
         }
 
         public static MasterPasswordManager getInstance(string filePath= "")

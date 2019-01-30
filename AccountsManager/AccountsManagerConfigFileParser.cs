@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Windows;
 
 namespace AccountsManager
 {
@@ -34,7 +29,10 @@ namespace AccountsManager
                     salt = u.Password.PasswordSalt;
                 }            
             }
-
+            if (String.IsNullOrEmpty(passwordHash) || (String.IsNullOrEmpty(salt)))
+            {
+                throw new FileFormatException("Unable to read from Accounts Manager Config File");
+            }
             return (passwordHash, salt);
         }
     }

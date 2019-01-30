@@ -58,25 +58,34 @@ namespace AccountsManager
                 UserAccountsManager.getInstance(projectDirectory + ACCTSMGRFILEPATH);
                 listboxuseraccounts.ItemsSource = UserAccountsManager.getInstance().getUserAccounts();
             }
-            catch (FileNotFoundException fex)
+            catch (FileNotFoundException ex)
             {
-                Window WpfBugWindow = new Window()
-                {
-                    AllowsTransparency = true,
-                    Background = System.Windows.Media.Brushes.Transparent,
-                    WindowStyle = WindowStyle.None,
-                    Top = 0,
-                    Left = 0,
-                    Width = 1,
-                    Height = 1,
-                    ShowInTaskbar = false
-                };
-
-                WpfBugWindow.Show();
-                System.Windows.MessageBox.Show(fex.Message);
-                WpfBugWindow.Close();
-                System.Windows.Application.Current.Shutdown();
+                showErrorWindow(ex);
             }
+            catch (FileFormatException ex)
+            {
+                showErrorWindow(ex);
+            }
+        }
+
+        private void showErrorWindow(Exception ex)
+        {
+            Window WpfBugWindow = new Window()
+            {
+                AllowsTransparency = true,
+                Background = System.Windows.Media.Brushes.Transparent,
+                WindowStyle = WindowStyle.None,
+                Top = 0,
+                Left = 0,
+                Width = 1,
+                Height = 1,
+                ShowInTaskbar = false
+            };
+
+            WpfBugWindow.Show();
+            System.Windows.MessageBox.Show(ex.Message);
+            WpfBugWindow.Close();
+            System.Windows.Application.Current.Shutdown();
         }
     
         private void btnClickEncrypt(object sender, RoutedEventArgs e)
