@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AccountsManager
 {
-    interface IFileParser
+    interface IUserAccountsFileParser
     {
         IList<UserAccount> ParseFile();
     }

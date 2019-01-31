@@ -67,15 +67,15 @@
     </Compile>
     <Compile Include="AccountsManagerConfigFileParser.cs" />
     <Compile Include="AccountsManagerConfigFileWriter.cs" />
-    <Compile Include="AccountsManagerFileParser.cs" />
-    <Compile Include="AccountsManagerFileWriter.cs" />
+    <Compile Include="UserAccountsrFileParser.cs" />
+    <Compile Include="UserAccountsFileWriter.cs" />
     <Compile Include="ChangeAccountWindow.xaml.cs">
       <DependentUpon>ChangeAccountWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IFileParser.cs" />
+    <Compile Include="IUserAccountsFileParser.cs" />
     <Compile Include="MasterPasswordManager.cs" />
     <Compile Include="SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>

@@ -10,16 +10,16 @@ namespace AccountsManager
     public sealed class UserAccountsManager
     {
         private IList<UserAccount> userAccounts;
-        private AccountsManagerFileParser amfp;
-        private AccountsManagerFileWriter amfw;
+        private UserAccountsrFileParser amfp;
+        private UserAccountsFileWriter amfw;
         private static string filePath;
         private static Lazy<UserAccountsManager> lazy = new Lazy<UserAccountsManager>(() => new UserAccountsManager(filePath));
 
         private UserAccountsManager(string filePath)
         {
             userAccounts = new ObservableCollection<UserAccount>();
-            amfp = new AccountsManagerFileParser(filePath);
-            amfw = new AccountsManagerFileWriter(filePath);
+            amfp = new UserAccountsrFileParser(filePath);
+            amfw = new UserAccountsFileWriter(filePath);
         }
 
         public static UserAccountsManager getInstance(string filePath = "")

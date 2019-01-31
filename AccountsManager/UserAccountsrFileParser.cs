@@ -8,11 +8,11 @@ using System.Xml;
 
 namespace AccountsManager
 {
-    public class AccountsManagerFileParser : IFileParser
+    public class UserAccountsrFileParser : IUserAccountsFileParser
     {
         private string filePath;
 
-        public AccountsManagerFileParser(string uaFilePath)
+        public UserAccountsrFileParser(string uaFilePath)
         {
             filePath = uaFilePath;
         }

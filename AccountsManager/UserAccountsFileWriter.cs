@@ -7,11 +7,11 @@ using System.Xml;
 
 namespace AccountsManager
 {
-    public class AccountsManagerFileWriter
+    public class UserAccountsFileWriter
     {
         private string filePath;
 
-        public AccountsManagerFileWriter(string filePath)
+        public UserAccountsFileWriter(string filePath)
         {
             this.filePath = filePath;
         }      
