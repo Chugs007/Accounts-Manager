@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace AccountsManager
 {
-    public class AccountsManagerFileParser
+    public class AccountsManagerFileParser : IFileParser
     {
         private string filePath;
 
@@ -17,7 +17,7 @@ namespace AccountsManager
             filePath = uaFilePath;
         }
 
-        public ObservableCollection<UserAccount> parseFile()
+        public IList<UserAccount> ParseFile()
         {
             ObservableCollection<UserAccount> userAccounts = new ObservableCollection<UserAccount>();
             try

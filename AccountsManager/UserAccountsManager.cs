@@ -9,7 +9,7 @@ namespace AccountsManager
 {
     public sealed class UserAccountsManager
     {
-        private ObservableCollection<UserAccount> userAccounts;
+        private IList<UserAccount> userAccounts;
         private AccountsManagerFileParser amfp;
         private AccountsManagerFileWriter amfw;
         private static string filePath;
@@ -35,10 +35,10 @@ namespace AccountsManager
             userAccounts = new ObservableCollection<UserAccount>(userAccounts.OrderBy(x => x.Domain).ToList());
         }
 
-        public ObservableCollection<UserAccount> getUserAccounts()
+        public IList<UserAccount> getUserAccounts()
         {
             
-            userAccounts = amfp.parseFile();                      
+            userAccounts = amfp.ParseFile();                      
             return userAccounts;
         }
 
