@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Controls;
+using AccountsManager.Encrpytion;
 
 namespace AccountsManager
 {

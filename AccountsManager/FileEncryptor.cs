@@ -12,10 +12,10 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace AccountsManager
+namespace AccountsManager.Encrpytion
 {
 
-    class FileEncryptor
+    public class FileEncryptor
     {        
         private static FileStream fsCrypt;
         private static CryptoStream cs;
@@ -45,7 +45,7 @@ namespace AccountsManager
             byte[] buffer = new byte[size];
             
             rng.GetBytes(buffer);
-            var salt = Convert.ToBase64String(buffer);
+            var salt = Convert.ToBase64String(buffer);            
             return salt;
         }
 
@@ -73,8 +73,7 @@ namespace AccountsManager
         public static RijndaelManaged CreateDES(string key,byte[] salt)
         {
             Rfc2898DeriveBytes keygen = new Rfc2898DeriveBytes(key,salt,1000);            
-            RijndaelManaged des = new RijndaelManaged();
-            Console.WriteLine(des.BlockSize);
+            RijndaelManaged des = new RijndaelManaged();            
             des.Key = keygen.GetBytes(32);            
             des.IV = keygen.GetBytes(16);            
             return des;

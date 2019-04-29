@@ -67,6 +67,9 @@
     </Compile>
     <Compile Include="AccountsManagerConfigFileParser.cs" />
     <Compile Include="AccountsManagerConfigFileWriter.cs" />
+    <Compile Include="IAccountsConfigParser.cs" />
+    <Compile Include="IAccountsConfigWriter.cs" />
+    <Compile Include="IUserAccountsWriter.cs" />
     <Compile Include="UserAccountsrFileParser.cs" />
     <Compile Include="UserAccountsFileWriter.cs" />
     <Compile Include="ChangeAccountWindow.xaml.cs">
