@@ -1,0 +1,15 @@
+﻿<Window x:Class="AccountsManager.AccountCreationsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AccountCreationsWindow" Height="300" Width="687">
+    <Grid>
+        <TextBox x:Name="txtBoxUserName" HorizontalAlignment="Left" Height="26" Margin="329,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="txtBoxPassword" HorizontalAlignment="Left" Height="26" Margin="329,98,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="txtBoxDomain" HorizontalAlignment="Left" Height="26" Margin="329,155,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200"/>
+        <Label Content="UserName" HorizontalAlignment="Left" Height="26" Margin="80,45,0,0" VerticalAlignment="Top" Width="155"/>
+        <Label Content="Password" HorizontalAlignment="Left" Height="26" Margin="80,98,0,0" VerticalAlignment="Top" Width="155"/>
+        <Label Content="Domain" HorizontalAlignment="Left" Height="26" Margin="80,155,0,0" VerticalAlignment="Top" Width="155" RenderTransformOrigin="0.471,4.269"/>
+        <Button Content="Add to file" HorizontalAlignment="Left" Height="28" Margin="80,211,0,0" VerticalAlignment="Top" Width="107" Click="Button_Click"/>
+
+    </Grid>
+</Window>
