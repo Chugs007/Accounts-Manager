@@ -62,50 +62,50 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AccountCreationsWindow.xaml.cs">
+    <Compile Include="Windows\AccountCreationsWindow.xaml.cs">
       <DependentUpon>AccountCreationsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AccountsManagerConfigFileParser.cs" />
-    <Compile Include="AccountsManagerConfigFileWriter.cs" />
-    <Compile Include="IAccountsConfigParser.cs" />
-    <Compile Include="IAccountsConfigWriter.cs" />
-    <Compile Include="IUserAccountsWriter.cs" />
-    <Compile Include="UserAccountsrFileParser.cs" />
-    <Compile Include="UserAccountsFileWriter.cs" />
-    <Compile Include="ChangeAccountWindow.xaml.cs">
+    <Compile Include="MasterAccount\XML\Reader\AccountsManagerConfigFileParser.cs" />
+    <Compile Include="MasterAccount\XML\Writer\AccountsXMLConfigWriter.cs" />
+    <Compile Include="MasterAccount\XML\Reader\IAccountsConfigParser.cs" />
+    <Compile Include="MasterAccount\XML\Writer\IAccountsConfigWriter.cs" />
+    <Compile Include="UserAccounts\XML\Writer\IUserAccountsWriter.cs" />
+    <Compile Include="UserAccounts\XML\Reader\UserAccountsrFileParser.cs" />
+    <Compile Include="UserAccounts\XML\Writer\UserAccountsFileWriter.cs" />
+    <Compile Include="Windows\ChangeAccountWindow.xaml.cs">
       <DependentUpon>ChangeAccountWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChangePasswordWindow.xaml.cs">
+    <Compile Include="Windows\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IUserAccountsFileParser.cs" />
-    <Compile Include="MasterPasswordManager.cs" />
-    <Compile Include="SearchWindow.xaml.cs">
+    <Compile Include="UserAccounts\XML\Reader\IUserAccountsFileParser.cs" />
+    <Compile Include="MasterAccount\MasterPasswordManager.cs" />
+    <Compile Include="Windows\SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SetMasterPasswordWindow.xaml.cs">
+    <Compile Include="Windows\SetMasterPasswordWindow.xaml.cs">
       <DependentUpon>SetMasterPasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="UserAccount.cs" />
-    <Compile Include="UserAccountsManager.cs" />
-    <Page Include="AccountCreationsWindow.xaml">
+    <Compile Include="UserAccounts\UserAccount.cs" />
+    <Compile Include="UserAccounts\UserAccountsManager.cs" />
+    <Page Include="Windows\AccountCreationsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ChangeAccountWindow.xaml">
+    <Page Include="Windows\ChangeAccountWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ChangePasswordWindow.xaml">
+    <Page Include="Windows\ChangePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AccountsManagerUsers.cs">
+    <Compile Include="MasterAccount\XML\AccountsManagerUsers.cs">
       <DependentUpon>AccountsManagerUsers.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -113,16 +113,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FileEncryptor.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Utility\FileEncryptor.cs" />
+    <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SearchWindow.xaml">
+    <Page Include="Windows\SearchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SetMasterPasswordWindow.xaml">
+    <Page Include="Windows\SetMasterPasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -147,10 +147,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="AccountsManager.xsd">
+    <None Include="UserAccounts\XML\AccountsManager.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="AccountsManagerUsers.xsd">
+    <Content Include="MasterAccount\XML\AccountsManagerUsers.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -168,17 +168,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AccountsManagerUsers.xml">
+    <Content Include="MasterAccount\XML\AccountsManagerUsers.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AccountsManager.xml">
+    <Content Include="UserAccounts\XML\AccountsManager.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
