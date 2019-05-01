@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountsManager
-{
-    class AccountsManagerConfigWriter
+namespace AccountsManager.Users.IO
+{ 
+    interface IUserAccountsFileParser
     {
+        IList<UserAccount> ParseFile();
     }
 }

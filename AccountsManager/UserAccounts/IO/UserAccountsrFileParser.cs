@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 using AccountsManager.Encrpytion;
 
-namespace AccountsManager.UserAccounts.XML.Reader
+namespace AccountsManager.Users.IO
 {
     public class UserAccountsrFileParser : IUserAccountsFileParser
     {
@@ -22,19 +23,20 @@ namespace AccountsManager.UserAccounts.XML.Reader
         {
             ObservableCollection<UserAccount> userAccounts = new ObservableCollection<UserAccount>();
             try
-            {
-                XmlDocument xmldocument = new XmlDocument();
-                xmldocument.Load(filePath);
-                XmlNodeList nodelist = xmldocument.SelectNodes("/UserAccounts/UserAccount");
-                foreach (XmlNode node in nodelist)
+            {                
+                using (XmlReader xmlReader = XmlReader.Create(filePath))
                 {
-                    UserAccount ua = new UserAccount();
-                    ua.Domain = node["Domain"].InnerText;
-                    ua.UserName = node["UserName"].InnerText;
-                    ua.Password = node["Password"].InnerText;
-                    userAccounts.Add(ua);
-                }
-               
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserAccounts));
+                    UserAccounts users =  xmlSerializer.Deserialize(xmlReader) as UserAccounts;
+                    foreach(var user in users.User)
+                    {
+                        UserAccount userAccount = new UserAccount();
+                        userAccount.Domain = user.Domain;
+                        userAccount.UserName = user.UserName;
+                        userAccount.Password = user.Password;
+                        userAccounts.Add(userAccount);
+                    }                     
+                }                        
                 FileEncryptor.IsEncrypted = false;                
             }
             catch (XmlException ex)

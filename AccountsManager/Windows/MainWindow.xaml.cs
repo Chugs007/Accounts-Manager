@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using AccountsManager.Encrpytion;
 using AccountsManager.MasterAccount;
-using AccountsManager.UserAccounts;
+using AccountsManager.Users;
 
 namespace AccountsManager
 {
@@ -19,8 +19,8 @@ namespace AccountsManager
     public partial class MainWindow : Window
     {
         public const string SPLASHSCRNIMGPATH = @"Resources\acctsmgrsplash.png";
-        private const string ACCTSMGRFILEPATH = @"\AccountsManager.xml";
-        private const string ACCTSMGRUSERSCONFIGPATH = @"\AccountsManagerUsers.xml";                
+        private const string ACCTSMGRFILEPATH = @"\UserAccounts\AccountsManagerUsers.xml";        
+        private const string ACCTSMGRUSERSCONFIGPATH = @"\MasterAccount\AccountsManagerConfig.xml";        
 
         public MainWindow()
         {
@@ -33,7 +33,7 @@ namespace AccountsManager
             this.DataContext = this;
             string projectDirectory = String.Empty;
 #if (DEBUG)
-            projectDirectory = @"C:\Program Files (x86)\AccountsManager";
+            projectDirectory = @"C:\Program Files (x86)\AccountsManager";            
 #else
             projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
 #endif

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows;
 using AccountsManager.Encrpytion;
-using AccountsManager.MasterAccount.XML.Reader;
-using AccountsManager.MasterAccount.XML.Writer;
+using AccountsManager.MasterAccount.IO;
 
 namespace AccountsManager.MasterAccount
 {

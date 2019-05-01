@@ -7,7 +7,7 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace AccountsManager.MasterAccount.XML.Writer
+namespace AccountsManager.MasterAccount.IO
 {
     public class AccountsXMLConfigWriter : IAccountsConfigWriter
     {

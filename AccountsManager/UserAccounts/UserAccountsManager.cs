@@ -1,5 +1,4 @@
-﻿using AccountsManager.UserAccounts.XML.Reader;
-using AccountsManager.UserAccounts.XML.Writer;
+﻿using AccountsManager.Users.IO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountsManager.UserAccounts
+namespace AccountsManager.Users
 {
     public sealed class UserAccountsManager
     {
