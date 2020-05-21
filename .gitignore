@@ -2,6 +2,10 @@
 [Bb]in/
 [Oo]bj/
 
+# Build related
+tools/**
+!tools/packages.config
+
 #Visual Studio 2017 options directory
 .vs/
 
