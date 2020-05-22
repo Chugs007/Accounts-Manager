@@ -1,7 +1,6 @@
 var target = Argument("target","Default");
 var debugFolder = Directory("./AccountsManager/bin/Debug");
 var testDebugFolder = Directory("./AccountsManagerUnitTests/bin/Debug");
-var testProject = Directory("./AccountsManagerUnitTests/bin/Release/netcoreapp2.2/AccountsManagerUnitTests.dll");
 
 Task("Clean")
 	.Does(() => {
