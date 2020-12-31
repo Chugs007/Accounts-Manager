@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.IO;
-using System.Xml;
-using System.Collections.ObjectModel;
-using System.Windows.Forms;
-using System.Windows.Media;
-using System.Windows.Controls;
 using AccountsManager.Encrpytion;
-using AccountsManager.MasterAccount;
+using AccountsManager.Encrpytion;
 using AccountsManager.Users;
+using AccountsManager.MasterConfig;
 
 namespace AccountsManager
 {
@@ -20,7 +15,7 @@ namespace AccountsManager
     {
         public const string SPLASHSCRNIMGPATH = @"Resources\acctsmgrsplash.png";
         private const string ACCTSMGRFILEPATH = @"\UserAccounts\AccountsManagerUsers.xml";        
-        private const string ACCTSMGRUSERSCONFIGPATH = @"\MasterAccount\AccountsManagerConfig.xml";        
+        private const string ACCTSMGRUSERSCONFIGPATH = @"\MasterConfig\MasterAccountConfig.xml";        
 
         public MainWindow()
         {
@@ -33,7 +28,8 @@ namespace AccountsManager
             this.DataContext = this;
             string projectDirectory = String.Empty;
 #if (DEBUG)
-            projectDirectory = @"C:\Program Files (x86)\AccountsManager";            
+            //projectDirectory = @"C:\Program Files (x86)\AccountsManager";            
+            projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
 #else
             projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
 #endif
@@ -49,14 +45,14 @@ namespace AccountsManager
                 {
                     throw new FileNotFoundException("Accounts Manager can't find specified config file " + projectDirectory + ACCTSMGRFILEPATH + " Application will now shutdown.");
                 }
-                MasterPasswordManager.getInstance(projectDirectory + ACCTSMGRUSERSCONFIGPATH);
-                if (String.IsNullOrEmpty(MasterPasswordManager.getInstance().getPasswordHash()))
+                MasterConfigManager.getInstance(projectDirectory + ACCTSMGRUSERSCONFIGPATH);
+                if (String.IsNullOrEmpty(MasterConfigManager.getInstance().getPasswordHash()))
                 {
                     System.Windows.MessageBox.Show("No master password has been set yet. " + Environment.NewLine + "Please enter a master password to be used to encrypt file.");
                     SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
                     smpw.ShowDialog();
                 }
-                if (!FileEncryptor.IsEncrypted)
+                if (MasterConfigManager.getInstance().getIsFileEncrypted() == false)
                     lblStatus.Visibility = Visibility.Hidden;
                 UserAccountsManager.getInstance(projectDirectory + ACCTSMGRFILEPATH);
                 listboxuseraccounts.ItemsSource = UserAccountsManager.getInstance().getUserAccounts();
@@ -93,14 +89,14 @@ namespace AccountsManager
     
         private void btnClickEncrypt(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrEmpty(MasterPasswordManager.getInstance().getPasswordHash()))
+            if (String.IsNullOrEmpty(MasterConfigManager.getInstance().getPasswordHash()))
             { 
                 System.Windows.MessageBox.Show("Master Password has not been set, please set master password first.");
                 SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
                 smpw.ShowDialog();
                 return;
             }
-            if (FileEncryptor.IsEncrypted)
+            if (MasterConfigManager.getInstance().getIsFileEncrypted() == true)
             {                
                 System.Windows.MessageBox.Show("File is already encrypted.");
                 return;                
@@ -117,13 +113,13 @@ namespace AccountsManager
                 return;
             }
             var password = txtBxPassword.Password;                  
-            bool correctPassword = MasterPasswordManager.getInstance().validatePaswword(password);
+            bool correctPassword = MasterConfigManager.getInstance().validatePaswword(password);
             if (!correctPassword)
             {
                 System.Windows.MessageBox.Show("Password is not correct!");
                 return;
             }            
-            FileEncryptor.Encrypt(file, password, MasterPasswordManager.getInstance().getPasswordSalt());        
+            FileEncryptor.Encrypt(file, password, MasterConfigManager.getInstance().getPasswordSalt());        
             listboxuseraccounts.ItemsSource = null;
             lblStatus.Visibility = Visibility.Visible;
         }
@@ -136,15 +132,15 @@ namespace AccountsManager
                 System.Windows.MessageBox.Show("Please select a file first.");
                 return;
             }
-            if (!FileEncryptor.IsEncrypted)
+            if(MasterConfigManager.getInstance().getIsFileEncrypted() == false)
             {
                 System.Windows.MessageBox.Show("File is already decrypted.");
                 return;
             }            
-            if (!string.IsNullOrEmpty(MasterPasswordManager.getInstance().getPasswordHash()))
+            if (!string.IsNullOrEmpty(MasterConfigManager.getInstance().getPasswordHash()))
             {
                 var password = txtBxPassword.Password;
-                bool CorrectPassword = MasterPasswordManager.getInstance().validatePaswword(password);
+                bool CorrectPassword = MasterConfigManager.getInstance().validatePaswword(password);
                 if (!CorrectPassword)
                 {
                     System.Windows.MessageBox.Show("Password is not correct!");
@@ -172,7 +168,7 @@ namespace AccountsManager
         {
             string file = txtFilePath.Text;
             var password = txtBxPassword.Password;
-            var salt = MasterPasswordManager.getInstance().getPasswordSalt();
+            var salt = MasterConfigManager.getInstance().getPasswordSalt();
             FileEncryptor.Decrypt(file, password, salt);
             listboxuseraccounts.ItemsSource = UserAccountsManager.getInstance().getUserAccounts();
         }
@@ -184,7 +180,7 @@ namespace AccountsManager
                 System.Windows.MessageBox.Show("Please enter a password to validate.");
                 return;
             }
-            if (String.IsNullOrEmpty(MasterPasswordManager.getInstance().getPasswordHash()))
+            if (String.IsNullOrEmpty(MasterConfigManager.getInstance().getPasswordHash()))
             {
                 System.Windows.MessageBox.Show("Master Password has not been set, please set master password first.");
                 SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
@@ -192,7 +188,7 @@ namespace AccountsManager
                 return;                
             }          
             string inputPassword = txtBxPassword.Password;
-            bool correctPassword = MasterPasswordManager.getInstance().validatePaswword(inputPassword);
+            bool correctPassword = MasterConfigManager.getInstance().validatePaswword(inputPassword);
             if (!correctPassword)
                 System.Windows.MessageBox.Show("Password is not correct!");
             else
@@ -245,7 +241,7 @@ namespace AccountsManager
 
         private void btnClickChangePassword(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrEmpty(MasterPasswordManager.getInstance().getPasswordHash()))
+            if (String.IsNullOrEmpty(MasterConfigManager.getInstance().getPasswordHash()))
             {
                 System.Windows.MessageBox.Show("No master password has been set yet, please set before attempting to change password");
                 SetMasterPasswordWindow smpw = new SetMasterPasswordWindow();
@@ -299,6 +295,11 @@ namespace AccountsManager
             UserAccountsManager.getInstance().editUserAccount(UserAccountsManager.getInstance().CurrentUserAccount, username, password, domain);          
             listboxuseraccounts.ItemsSource = null;
             listboxuseraccounts.ItemsSource = UserAccountsManager.getInstance().getUserAccounts();              
-        }   
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
     }
 }

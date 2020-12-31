@@ -1,4 +1,4 @@
-﻿using AccountsManager.MasterAccount;
+﻿using AccountsManager.MasterConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +34,8 @@ namespace AccountsManager
             {
                 MessageBox.Show("Please enter a valid password!");
                 return;
-            }            
-            MasterPasswordManager.getInstance().setPassword(inputPassword);
+            }
+            MasterConfigManager.getInstance().setPassword(inputPassword);
             MasterPasswordSet = true;
             this.Close();
             MessageBox.Show("Master Password has been set!");

@@ -1,4 +1,4 @@
-﻿using AccountsManager.MasterAccount;
+﻿using AccountsManager.MasterConfig;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -11,17 +11,11 @@ namespace AccountsManager.Encrpytion
     {        
         private static FileStream fsCrypt;
         private static CryptoStream cs;
-        private static FileStream fsIn;     
+        private static FileStream fsIn;
 
         public FileEncryptor()
         {
-           
-        }
 
-        public static bool IsEncrypted
-        {
-            get;
-            set;
         }
 
         public static RijndaelManaged DES
@@ -51,7 +45,7 @@ namespace AccountsManager.Encrpytion
       
         public static void Encrypt(string file, string password, string salt)
         {
-            var saltValue = Convert.FromBase64String(MasterPasswordManager.getInstance().getPasswordSalt());
+            var saltValue = Convert.FromBase64String(MasterConfigManager.getInstance().getPasswordSalt());
             EncryptFile(file,password,saltValue);
         }
 
@@ -81,7 +75,7 @@ namespace AccountsManager.Encrpytion
                 cs = new CryptoStream(fsCrypt, DES.CreateEncryptor(), CryptoStreamMode.Write);
                 cs.Write(fileBuffer, 0, fileBuffer.Length);
                 cs.FlushFinalBlock();
-                IsEncrypted = true;          
+                MasterConfigManager.getInstance().setFileEncrypted(true);
             }          
             finally
             {
@@ -113,7 +107,7 @@ namespace AccountsManager.Encrpytion
                 {
                     fsIn.WriteByte((byte)data);
                 }
-                IsEncrypted = false;                       
+                MasterConfigManager.getInstance().setFileEncrypted(false);
             }          
             finally
             {

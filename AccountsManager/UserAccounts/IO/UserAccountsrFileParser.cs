@@ -1,12 +1,10 @@
-﻿using System;
+﻿using AccountsManager.MasterConfig;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using AccountsManager.Encrpytion;
+
 
 namespace AccountsManager.Users.IO
 {
@@ -37,12 +35,11 @@ namespace AccountsManager.Users.IO
                         userAccounts.Add(userAccount);
                     }                     
                 }                        
-                FileEncryptor.IsEncrypted = false;                
             }
-            catch (XmlException ex)
+            catch (InvalidOperationException ex)
             {
                 (System.Windows.Application.Current.MainWindow as MainWindow).lblStatus.Visibility = System.Windows.Visibility.Visible;
-                FileEncryptor.IsEncrypted = true;
+                MasterConfigManager.getInstance().setFileEncrypted(true);
                 return userAccounts;                
             }
             return userAccounts;

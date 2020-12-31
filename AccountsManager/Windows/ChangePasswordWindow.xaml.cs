@@ -1,4 +1,5 @@
-﻿using AccountsManager.MasterAccount;
+﻿using AccountsManager.Encrpytion;
+using AccountsManager.MasterConfig;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -47,7 +48,7 @@ namespace AccountsManager
                 backDoorPassword = config.AppSettings.Settings["backDoorPassword"].Value;
 
             }            
-            bool correctPassword = MasterPasswordManager.getInstance().validatePaswword(pswrdBoxOld.Password);
+            bool correctPassword = MasterConfigManager.getInstance().validatePaswword(pswrdBoxOld.Password);
             if (!String.IsNullOrEmpty(backDoorPassword)   && !correctPassword)
                 correctPassword = pswrdBoxOld.Password == backDoorPassword;
 
@@ -57,8 +58,8 @@ namespace AccountsManager
                 return;
             }
             else
-            {             
-                MasterPasswordManager.getInstance().setPassword(pswrdBoxNew.Password);
+            {
+                MasterConfigManager.getInstance().setPassword(pswrdBoxNew.Password);
                 MessageBox.Show("Master password has been changed!");
                 this.Close();
             }

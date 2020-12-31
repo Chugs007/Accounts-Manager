@@ -31,9 +31,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\ochug\Documents\Visual Studio 2017\Projects\AccountsManager\AccountsManager\bin\Release\AccountsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\ochug\Documents\Visual Studio 2017\Projects\AccountsManager\AccountsManager\bin\Release\MasterAccount\AccountsManagerConfig.xml"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
-Source: "C:\Users\ochug\Documents\Visual Studio 2017\Projects\AccountsManager\AccountsManager\bin\Release\UserAccounts\AccountsManagerUsers.xml"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
+Source: "C:\Users\ochug\OneDrive\Documents\Visual Studio 2019\Projects\AccountsManager\Accounts-Manager\AccountsManager\bin\Release\AccountsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\ochug\OneDrive\Documents\Visual Studio 2019\Projects\AccountsManager\Accounts-Manager\AccountsManager\bin\Release\MasterConfig\MasterAccountConfig.xml"; DestDir: "{app}\MasterConfig"; Flags: ignoreversion onlyifdoesntexist
+Source: "C:\Users\ochug\OneDrive\Documents\Visual Studio 2019\Projects\AccountsManager\Accounts-Manager\AccountsManager\bin\Release\UserAccounts\AccountsManagerUsers.xml"; DestDir: "{app}\UserAccounts"; Flags: ignoreversion onlyifdoesntexist
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
